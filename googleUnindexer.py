@@ -79,8 +79,8 @@ if str(input("Is this correct?' (y/n): ")).lower().strip() != 'y':
 
 def query_google(index):
     ratelimited=0
-    while ratelimited < 4:
-        for i in index:
+    for i in index:
+        while ratelimited < 4:
             content = {'url': urls.url[i], 'type': action_type}
             response, content = http.request(
                 ENDPOINT, method="POST", body=str(content))
@@ -94,8 +94,8 @@ def query_google(index):
             print(f"Result for item {i} of {len(index)} of  is {response.status}")
             urls.iloc[i]['action_status'] = response.status
             time.sleep(1)
-    else:
-        print(f"Too many rate limits recieved, aborting")
+        else:
+            print(f"Too many rate limits recieved, aborting")
 
 query_google(urls_actionable_index)
 query_google(urls_retry_index)
