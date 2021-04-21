@@ -106,4 +106,4 @@ query_google(urls_retry_index)
 #Save Results
 ##############
 
-urls.to_csv('data_reviewed.csv', index=False)
+urls.to_csv(filename, index=False)
