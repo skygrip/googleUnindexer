@@ -80,26 +80,23 @@ if str(input("Is this correct?' (y/n): ")).lower().strip() != 'y':
 def query_google(index):
     ratelimited=0
     for i in index:
-        if ratelimited < 4:
+        if ratelimited == 0:
             content = {'url': urls.url[i], 'type': action_type}
             response, content = http.request(
                 ENDPOINT, method="POST", body=str(content))
             if response.status == 429:
-                print("HTTP 429 recieved, requests have been rate limited")
-                ratelimited += 1
-                print(f"sleeping for {ratelimited} seconds")
-                time.sleep(ratelimited)
+                print("HTTP 429 recieved, exceeded Indexing API quota")
+                ratelimited == 1
             if response.status != 200:
-                raise Exception("Error: Non HTTP 200 response recieved")
+                raise Exception(f"Error: Non HTTP 200 response recieved. HTTP Status {response.status}")
             print(f"Result for item {i+1} of {len(index)} is {response.status}")
             urls.iloc[i]['action_status'] = response.status
-            time.sleep(1)
         else:
             print(f"Too many rate limits recieved, aborting")
-    print("All items processed")
 
 query_google(urls_actionable_index)
 query_google(urls_retry_index)
+print("All items processed")
 
 # %%
 ##############
